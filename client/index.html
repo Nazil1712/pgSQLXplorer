@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PostgreSQL Client (Vanilla JS & Axios)</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            margin: 20px;
+        }
+        .output {
+            margin-top: 20px;
+            background-color: #f2f2f2;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.7/axios.min.js"></script>
+</head>
+<body>
+
+    <div class="container">
+        <h1>PostgreSQL Client Interface</h1>
+
+        <!-- Form to get maximum salary by department -->
+        <div>
+            <h3>Get Maximum Salary by Department</h3>
+            <input type="text" id="department" placeholder="Enter Department Name">
+            <button onclick="getMaxSalByDept()">Get Max Salary</button>
+        </div>
+
+        <!-- Form to update employee salary -->
+        <div>
+            <h3>Update Employee Salary</h3>
+            <input type="nazil@1712" id="empId" placeholder="Enter Employee ID">
+            <input type="number" id="newSalary" placeholder="Enter New Salary">
+            <button onclick="updateSalary()">Update Salary</button>
+        </div>
+
+        <!-- Button to get customer order report -->
+        <div>
+            <h3>Get Customer Order Report</h3>
+            <button onclick="getCustomerOrderReport()">Get Report</button>
+        </div>
+
+        <!-- Output display -->
+        <div class="output" id="output">
+            <h3>Output</h3>
+            <pre id="outputContent">Results will be displayed here...</pre>
+        </div>
+    </div>
+
+    <script>
+        const apiUrl = "http://localhost:3000"; // API base URL
+
+        // Function to get maximum salary by department
+        async function getMaxSalByDept() {
+            const department = document.getElementById("department").value;
+            try {
+                const response = await axios.get(`${apiUrl}/max-sal-by-dept/${department}`);
+                document.getElementById("outputContent").innerText = JSON.stringify(response.data, null, 2);
+            } catch (error) {
+                console.error("Error fetching max salary:", error);
+                document.getElementById("outputContent").innerText = "Error fetching data";
+            }
+        }
+
+        // Function to update employee salary
+        async function updateSalary() {
+            const empId = document.getElementById("empId").value;
+            const newSalary = document.getElementById("newSalary").value;
+            try {
+                const response = await axios.post(`${apiUrl}/update-emp-salary`, {
+                    empId,
+                    newSalary
+                });
+                document.getElementById("outputContent").innerText = JSON.stringify(response.data, null, 2);
+            } catch (error) {
+                console.error("Error updating salary:", error);
+                document.getElementById("outputContent").innerText = "Error updating salary";
+            }
+        }
+
+        // Function to get customer order report
+        async function getCustomerOrderReport() {
+            try {
+                const response = await axios.get(`${apiUrl}/customer-order-report`);
+                document.getElementById("outputContent").innerText = JSON.stringify(response.data, null, 2);
+            } catch (error) {
+                console.error("Error fetching customer orders:", error);
+                document.getElementById("outputContent").innerText = "Error fetching customer orders";
+            }
+        }
+    </script>
+
+</body>
+</html>
